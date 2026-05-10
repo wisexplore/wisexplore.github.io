@@ -1,9 +1,9 @@
 ---
-title: "WSL + Git + Go + Docker + K8s实战回顾"
+title: "WSL + Git + Go + Docker + K8s 实战回顾"
 date: 2026-05-10
 draft: false
-description: "从 WSL 环境配置到 Go Web 服务、Docker 容器化、kind 本地 K8s 部署的一次完整实践复盘。"
-tags: ["WSL", "Git", "Go", "Docker", "K8s"]
+description: "从 WSL 环境配置到 Go Web 服务、Docker 容器化、kind 本地 Kubernetes 部署的一次完整实践复盘。"
+tags: ["WSL", "Git", "Go", "Docker", "Kubernetes", "kind"]
 categories: ["编程环境", "云原生"]
 ShowToc: true
 TocOpen: false
@@ -1264,18 +1264,18 @@ containerd 是真正启动容器的执行者
 
 ## 14.5 公司平台概念映射
 
-| 公司平台说法 | K8s 对应 |
-|---|---|
-| 应用 | Deployment |
-| 实例 | Pod |
-| 实例数 | replicas |
-| 实例规格 | resources requests / limits |
-| 服务器 | Node |
-| 镜像版本 | image |
-| 健康检查 | readinessProbe / livenessProbe |
-| 发布 | rollout |
-| 回滚 | rollout undo |
-| 服务暴露 | Service / Ingress |
+| 公司平台说法 | K8s 对应                       |
+| ------------ | ------------------------------ |
+| 应用         | Deployment                     |
+| 实例         | Pod                            |
+| 实例数       | replicas                       |
+| 实例规格     | resources requests / limits    |
+| 服务器       | Node                           |
+| 镜像版本     | image                          |
+| 健康检查     | readinessProbe / livenessProbe |
+| 发布         | rollout                        |
+| 回滚         | rollout undo                   |
+| 服务暴露     | Service / Ingress              |
 
 ---
 
@@ -2388,16 +2388,17 @@ sudo apt install -y curl wget vim nano unzip zip ca-certificates gnupg lsb-relea
 
 常用工具说明：
 
-| 工具 | 作用 |
-|---|---|
-| `curl` | 发送 HTTP 请求，下载文件，测试接口 |
-| `wget` | 下载文件 |
-| `vim` | 文本编辑器 |
-| `nano` | 简单文本编辑器 |
-| `unzip` / `zip` | 解压和压缩 |
-| `ca-certificates` | HTTPS 证书支持 |
-| `gnupg` | GPG 密钥工具 |
-| `lsb-release` | 查看 Linux 发net-tools` | 提供 ifconfig 等传统网络工具 |
+| 工具              | 作用                               |
+| ----------------- | ---------------------------------- |
+| `curl`            | 发送 HTTP 请求，下载文件，测试接口 |
+| `wget`            | 下载文件                           |
+| `vim`             | 文本编辑器                         |
+| `nano`            | 简单文本编辑器                     |
+| `unzip` / `zip`   | 解压和压缩                         |
+| `ca-certificates` | HTTPS 证书支持                     |
+| `gnupg`           | GPG 密钥工具                       |
+| `lsb-release`     | 查看 Linux 发行版信息              |
+| `net-tools`       | 提供 ifconfig 等传统网络工具       |
 
 ---
 
@@ -2480,7 +2481,10 @@ ssh-keygen -t ed25519 -C "你的GitHub邮箱"
 ls ~/.ssh
 ```
 
-常见æ_ed25519      私钥，不要泄露
+常见文件：
+
+```text
+id_ed25519      私钥，不要泄露
 id_ed25519.pub  公钥，可以添加到 GitHub
 ```
 
@@ -2565,7 +2569,7 @@ git remote -v
 
 ```bash
 git add .
-gommit -m "init: init wsl godemo1 project"
+git commit -m "init: init wsl godemo1 project"
 git push -u origin master
 ```
 
@@ -2608,7 +2612,7 @@ git remote -v
 
 查看状态：
 
-`bash
+```bash
 git status
 ```
 
@@ -2654,7 +2658,7 @@ git rebase --abort
 git rebase --continue
 ```
 
--
+---
 
 # 附录 C：Go / Golang 安装
 
@@ -2694,7 +2698,7 @@ go env GOROOT
 
 ```bash
 cd /tmp
-wget https://go.dev/dl/go1.26.0.liamd64.tar.gz
+wget https://go.dev/dl/go1.26.0.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
 sudo tar -C /usr/local -xzf go1.26.0.linux-amd64.tar.gz
 ```
@@ -2737,11 +2741,16 @@ go env
 ```bash
 go env GOPATH
 go env GOROOT
-go env GOPROX| 变量 | 作用 |
-|---|---|
-| `GOROOT` | Go SDK 安装目录 |
-| `GOPATH` | Go 工作区和 `go install` 默认安装目录 |
-| `GOPROXY` | Go 模块下载代理 |
+go env GOPROXY
+```
+
+含义：
+
+| 变量      | 作用                                  |
+| --------- | ------------------------------------- |
+| `GOROOT`  | Go SDK 安装目录                       |
+| `GOPATH`  | Go 工作区和 `go install` 默认安装目录 |
+| `GOPROXY` | Go 模块下载代理                       |
 
 ---
 
@@ -2776,7 +2785,7 @@ $HOME/go/bin
 所以要配置 PATH：
 
 ```bash
-echo 'export PATgo/bin' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -2797,12 +2806,12 @@ source ~/.bashrc
 
 说明：
 
-| 选项 | 建议 | 说明 |
-|---|---|---|
-| All users installation | 选 | 给所有用户安装 |
-| Use WSL 2 instead of Hyper-V | 必选 | WSL 开发环境推荐 |
-| Allow Windows Containers || 普通 Go/K8s 学习使用 Linux 容器即可 |
-| Add shortcut to desktop | 随意 | 桌面快捷方式 |
+| 选项                         | 建议 | 说明                                |
+| ---------------------------- | ---- | ----------------------------------- |
+| All users installation       | 选   | 给所有用户安装                      |
+| Use WSL 2 instead of Hyper-V | 必选 | WSL 开发环境推荐                    |
+| Allow Windows Containers     | 不选 | 普通 Go/K8s 学习使用 Linux 容器即可 |
+| Add shortcut to desktop      | 随意 | 桌面快捷方式                        |
 
 ---
 
@@ -2840,7 +2849,10 @@ docker version
 如果报：
 
 ```text
-The command 'docker' could not be found in this WSL 2 distro Docker Desktop 没启动，或者 WSL Integration 没打开。
+The command 'docker' could not be found in this WSL 2 distro.
+```
+
+一般是 Docker Desktop 没启动，或者 WSL Integration 没打开。
 
 处理：
 
@@ -2886,7 +2898,7 @@ docker image prune
 docker system df
 ```
 
-谨慎清理所æ¼
+谨慎清理所有未使用资源：
 
 ```bash
 docker system prune
@@ -2970,7 +2982,7 @@ kind version
 ## F.2 创建集群
 
 ```bash
-kind create cluster --nameemo
+kind create cluster --name godemo
 ```
 
 查看集群：
@@ -3025,6 +3037,9 @@ cd ~/project/godemo1
 
 ```bash
 cd ..
+```
+
+返回用户主目录：
 
 ```bash
 cd ~
@@ -3062,11 +3077,11 @@ lrwxrwxrwx 1 root root 21 May  8 10:00 go -> ../lib/go/bin/go
 
 第一位含义：
 
-| 第一位 | 含义 |
-|---|---|
-| `-` | 普通文件 |
-| `d` | 目录 |
-| `l` | 软链接 |
+| 第一位 | 含义     |
+| ------ | -------- |
+| `-`    | 普通文件 |
+| `d`    | 目录     |
+| `l`    | 软链接   |
 
 权限部分：
 
@@ -3074,7 +3089,10 @@ lrwxrwxrwx 1 root root 21 May  8 10:00 go -> ../lib/go/bin/go
 rw-r--r--
 ```
 
-分三用户权限  用户组权限  其他人权限
+分三组：
+
+```text
+用户权限  用户组权限  其他人权限
 rw-       r--        r--
 ```
 
@@ -3185,7 +3203,8 @@ grep -i proxy ~/.bashrc
 
 递归搜索目录：
 
-` "godemo1" .
+```bash
+grep -r "godemo1" .
 ```
 
 配合管道：
@@ -3231,7 +3250,9 @@ EOF
 
 ## G.7 权限与执行
 
-查看权é
+查看权限：
+
+```bash
 ls -l
 ```
 
@@ -3300,7 +3321,7 @@ ss -lntp
 查看 8080 端口：
 
 ```bash
-ss -lntp | gr080
+ss -lntp | grep 8080
 ```
 
 测试 HTTP：
@@ -3406,7 +3427,9 @@ sudo apt update
 sudo apt install -y git curl vim
 ```
 
-升级èh
+升级软件：
+
+```bash
 sudo apt upgrade -y
 ```
 
@@ -3453,7 +3476,8 @@ ls -la
 mkdir -p dir
 touch file
 cat file
-nano e
+nano file
+vim file
 rm file
 rm -r dir
 cp a b
@@ -3482,7 +3506,8 @@ git commit -m "说明"
 git remote -v
 git remote add origin git@github.com:wisexplore/godemo1.git
 git push -u origin master
-git puit rm -r --cached .idea
+git push
+git rm -r --cached .idea
 ```
 
 ---
@@ -3573,7 +3598,8 @@ kubectl delete pod pod名字
 ```bash
 git status
 git add .
-git commit t push
+git commit -m "说明"
+git push
 ```
 
 记忆：
@@ -3612,7 +3638,7 @@ kubectl port-forward svc/godemo1-service 8080:80
 记忆：
 
 ```text
-导入镜像 → 应ç®¿问
+导入镜像 → 应用配置 → 看 Pod → 转发访问
 ```
 
 ---
@@ -3652,7 +3678,7 @@ env | grep -i proxy
 
 ## J.1 sidecar 一般用来做什么？
 
-是的，**sidec常用于监控、日志、代理、流量治理等辅助能力**。
+是的，**sidecar 通常用于监控、日志、代理、流量治理等辅助能力**。
 
 sidecar 本质上也是一个容器，只是它不是主业务容器，而是和主容器放在同一个 Pod 里，辅助主容器工作。
 
@@ -3666,14 +3692,14 @@ Pod
 
 常见用途：
 
-| 用途 | 说明 |
-|---|---|
+| 用途     | 说明                              |
+| -------- | --------------------------------- |
 | 日志采集 | 收集 app 容器日志并发送到日志系统 |
-| 监控采集 | 采集指标并上报 |
-| 流量 | 代理进出流量，例如 Envoy |
-| 服务网格 | 做熔断、限流、灰度、链路追踪 |
-| 配置同步 | 动态拉取配置、证书或密钥 |
-| 文件辅助 | 共享 volume，辅助主容器处理文件 |
+| 监控采集 | 采集指标并上报                    |
+| 流量代理 | 代理进出流量，例如 Envoy          |
+| 服务网格 | 做熔断、限流、灰度、链路追踪      |
+| 配置同步 | 动态拉取配置、证书或密钥          |
+| 文件辅助 | 共享 volume，辅助主容器处理文件   |
 
 典型例子：
 
@@ -3684,7 +3710,11 @@ Pod
 ```
 
 注意：不要把多个不相关的业务服务塞进一个 Pod。  
-sidecar 适合“主容器 + 辅助容器”，不是“多个业务系统混在一起âontainerd、sidecar、Pod、服务器是什么 1 对多关系？
+sidecar 适合“主容器 + 辅助容器”，不是“多个业务系统混在一起”。
+
+---
+
+## J.2 containerd、sidecar、Pod、服务器是什么 1 对多关系？
 
 简化关系：
 
@@ -3703,15 +3733,16 @@ Node 服务器
 
 对应关系：
 
-| 对象 A | 对象 B | 关系 |
-|---|---|---|
-| K8s 集群 | Node 服务器 | 1 对多 |
-| Node 服务器 | containerd | 通常 1 对 1 |
-| Node 服务器 | Pcontainerd | 容器 | 1 对多 |
-| Pod | 容器 | 1 对 1 或 1 对多 |
-| Pod | sidecar | 1 对 0/1/多 |
-| Deployment | Pod 实例 | 1 对多 |
-| 公司平台实例 | Pod | 通常近似 1 对 1 |
+| 对象 A       | 对象 B      | 关系             |
+| ------------ | ----------- | ---------------- |
+| K8s 集群     | Node 服务器 | 1 对多           |
+| Node 服务器  | containerd  | 通常 1 对 1      |
+| Node 服务器  | Pod         | 1 对多           |
+| containerd   | 容器        | 1 对多           |
+| Pod          | 容器        | 1 对 1 或 1 对多 |
+| Pod          | sidecar     | 1 对 0/1/多      |
+| Deployment   | Pod 实例    | 1 对多           |
+| 公司平台实例 | Pod         | 通常近似 1 对 1  |
 
 关键理解：
 
@@ -3735,7 +3766,10 @@ sidecar 是 Pod 里的辅助容器
 比如平台配置：
 
 ```text
-å¹应：
+实例数：2
+```
+
+底层常见对应：
 
 ```yaml
 replicas: 2
@@ -3784,10 +3818,10 @@ resources:
 
 含义：
 
-| 字段 | 作用 |
-|---|---|
-| requests | 调度时申请的最低资源 |
-| limits | 运行时最多能使用的资源 |
+| 字段     | 作用                   |
+| -------- | ---------------------- |
+| requests | 调度时申请的最低资源   |
+| limits   | 运行时最多能使用的资源 |
 
 调度链路：
 
@@ -3801,7 +3835,7 @@ Scheduler 根据 requests 找资源足够的 Node
 Pod 被调度到某台服务器运行
 ```
 
-所以：**规格是声明出来的资源需求，调度器根据规格去服务器资源池里置。**
+所以：**规格是声明出来的资源需求，调度器根据规格去服务器资源池里找位置。**
 
 ---
 
@@ -3828,7 +3862,7 @@ kubectl port-forward 更偏调试工具
 更准确的验证方式是从集群内部访问 Service：
 
 ```bash
-kubec run curl-test --image=curlimages/curl -it --rm --restart=Never -- sh
+kubectl run curl-test --image=curlimages/curl -it --rm --restart=Never -- sh
 ```
 
 进入后：
@@ -3859,7 +3893,7 @@ godemo1-service   10.244.0.7:8080,10.244.0.8:8080
 
 ```text
 godemo1-service
- ── 10.244.0.7:8080
+  ├── 10.244.0.7:8080
   └── 10.244.0.8:8080
 ```
 
@@ -3901,7 +3935,7 @@ exit
 Ctrl + D
 ```
 
-因为`--rm`：
+因为创建时用了 `--rm`：
 
 ```bash
 kubectl run curl-test --image=curlimages/curl -it --rm --restart=Never -- sh
@@ -3935,7 +3969,8 @@ curl http://localhost:8080/version
 os.Hostname()
 ```
 
-在 K8s 中，容器运行在 Pod 内，默认 hostname 通常就是这个字段可以用来观察请求实际打到了哪个 Pod。
+在 K8s 中，容器运行在 Pod 内，默认 hostname 通常就是 Pod 名。  
+所以这个字段可以用来观察请求实际打到了哪个 Pod。
 
 ---
 
@@ -3964,7 +3999,11 @@ CrashLoopBackOff
 http.ListenAndServe(":8080", nil)
 ```
 
-也就是长期运行的 Web 服å J.10 这次实践中最重要的概念链路
+也就是长期运行的 Web 服务。
+
+---
+
+## J.10 这次实践中最重要的概念链路
 
 ```text
 Go 源码
@@ -3993,4 +4032,3 @@ Docker 解决“怎么打包和运行一个容器”
 K8s 解决“怎么管理很多容器化应用”
 Service 解决“怎么稳定访问一组会变化的 Pod”
 ```
-
