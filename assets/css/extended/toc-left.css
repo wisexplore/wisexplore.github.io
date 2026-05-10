@@ -1,0 +1,28 @@
+@media (min-width: 1400px) {
+  .toc {
+    position: fixed;
+    left: 32px;
+    top: 120px;
+    width: 260px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: var(--entry);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+  }
+
+  .toc details {
+    margin: 0;
+  }
+
+  .toc .inner {
+    margin: 8px 0 0;
+  }
+
+  .main {
+    max-width: 860px;
+  }
+}

@@ -1,0 +1,63 @@
+baseURL: "https://wisexplore.github.io/"
+title: "WiseXplore"
+theme: "PaperMod"
+languageCode: "zh-cn"
+defaultContentLanguage: "zh"
+
+enableRobotsTXT: true
+enableEmoji: true
+hasCJKLanguage: true
+
+pagination:
+  pagerSize: 10
+
+params:
+  env: production
+  title: "WiseXplore"
+  description: "我的小天地。"
+  author: "wisexplore"
+
+  assets:
+    css:
+      - "css/extended/toc-left.css"
+  
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowToc: true
+  TocOpen: true
+
+  homeInfoParams:
+    Title: "WiseXplore"
+    Content: "我的小天地。"
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/wisexplore"
+
+menu:
+  main:
+    - identifier: posts
+      name: 文章
+      url: /posts/
+      weight: 10
+    - identifier: archives
+      name: 归档
+      url: /archives/
+      weight: 20
+    - identifier: tags
+      name: 标签
+      url: /tags/
+      weight: 30
+    - identifier: search
+      name: 搜索
+      url: /search/
+      weight: 40
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
