@@ -47,6 +47,10 @@ menu:
       name: 归档
       url: /archives/
       weight: 20
+    - identifier: ai-records
+      name: AI记录
+      url: /ai-records/
+      weight: 25
     - identifier: tags
       name: 标签
       url: /tags/
