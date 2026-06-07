@@ -1,0 +1,73 @@
+.home-portal {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 76px 0 32px;
+}
+
+.home-portal-header {
+  margin-bottom: 36px;
+}
+
+.home-portal-kicker {
+  margin-bottom: 10px;
+  color: var(--secondary);
+  font-size: 15px;
+}
+
+.home-portal-header h1 {
+  margin: 0 0 16px;
+  font-size: 40px;
+  line-height: 1.25;
+}
+
+.home-portal-header p {
+  max-width: 720px;
+  color: var(--secondary);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.home-portal-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.home-portal-links a {
+  display: block;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--entry);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.home-portal-links a:hover {
+  border-color: var(--tertiary);
+  transform: translateY(-2px);
+}
+
+.home-portal-links strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.home-portal-links span {
+  color: var(--secondary);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .home-portal {
+    padding-top: 24px;
+  }
+
+  .home-portal-header h1 {
+    font-size: 30px;
+  }
+
+  .home-portal-links {
+    grid-template-columns: 1fr;
+  }
+}
