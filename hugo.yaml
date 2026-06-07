@@ -8,6 +8,12 @@ enableRobotsTXT: true
 enableEmoji: true
 hasCJKLanguage: true
 
+taxonomies: {}
+
+disableKinds:
+  - taxonomy
+  - term
+
 pagination:
   pagerSize: 10
 
@@ -33,35 +39,31 @@ params:
     Title: "WiseXplore"
     Content: "我的小天地。"
 
+  mainSections:
+    - posts
+    - ai-records
+    - leetcode
+
   socialIcons:
     - name: github
       url: "https://github.com/wisexplore"
 
 menu:
   main:
-    - identifier: posts
-      name: 文章
-      url: /posts/
-      weight: 10
     - identifier: archives
       name: 归档
       url: /archives/
-      weight: 20
+      weight: 10
     - identifier: ai-records
       name: AI记录
       url: /ai-records/
-      weight: 25
-    - identifier: tags
-      name: 标签
-      url: /tags/
+      weight: 20
+    - identifier: leetcode
+      name: LeetCode
+      url: /leetcode/
       weight: 30
-    - identifier: search
-      name: 搜索
-      url: /search/
-      weight: 40
 
 outputs:
   home:
     - HTML
     - RSS
-    - JSON
