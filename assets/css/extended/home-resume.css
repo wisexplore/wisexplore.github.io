@@ -5,7 +5,18 @@
 }
 
 .home-portal-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
   margin-bottom: 32px;
+}
+
+.home-portal-mark {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
 }
 
 .home-portal-header h1 {
@@ -23,7 +34,7 @@
 
 .home-portal-links {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -52,9 +63,20 @@
   font-size: 14px;
 }
 
+@media (max-width: 960px) {
+  .home-portal-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .home-portal {
     padding-top: 24px;
+  }
+
+  .home-portal-header {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .home-portal-header h1 {

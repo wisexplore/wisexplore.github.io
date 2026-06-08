@@ -43,6 +43,7 @@ params:
     - posts
     - ai-records
     - leetcode
+    - engineering-notes
 
   socialIcons:
     - name: github
@@ -62,6 +63,10 @@ menu:
       name: LeetCode
       url: /leetcode/
       weight: 30
+    - identifier: engineering-notes
+      name: 工程杂记
+      url: /engineering-notes/
+      weight: 40
 
 outputs:
   home:
