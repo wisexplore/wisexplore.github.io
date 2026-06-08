@@ -64,7 +64,7 @@ menu:
       url: /leetcode/
       weight: 30
     - identifier: engineering-notes
-      name: 工程杂记
+      name: 小拾谈记
       url: /engineering-notes/
       weight: 40
 
