@@ -6,10 +6,13 @@
   <div class="post-description">
     {{ . }}
   </div>
-  {{- end }}
+{{- end }}
 </header>
 
 {{- $pages := where .Pages "Kind" "page" }}
+{{- if eq (len $pages) 0 }}
+<p class="post-description">暂无记录。</p>
+{{- end }}
 {{- range $pages.GroupByDate "2006" }}
 {{- if ne .Key "0001" }}
 <div class="archive-year">
